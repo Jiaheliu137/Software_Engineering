@@ -22,6 +22,8 @@ poetry shell
 python manage.py runserver
 ```
 
+复制 **http://127.0.0.1:8000/** 于浏览器打开
+
 **管理员账户：**
 
 **用户名: admin**
