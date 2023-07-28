@@ -1,0 +1,71 @@
+{% extends 'blogs/base.html' %}
+
+{% load turbo_frames %}
+
+{% block content %}
+
+<h1>All blogs</h1>
+
+<ul>
+{% for post in posts %}
+    <li>
+        <h2>Title: <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+        <p>Author: <a href="{% url 'author_posts' post.author.user.username %}">{{ post.author.user.username }}</a></p>
+        <p>Post-Date：{{ post.date_created }}</p>
+        <p>Content: {{ post.content }}</p>    
+    </li>
+{% empty %}
+    <li>No articles.</li>
+{% endfor %}
+</ul>
+
+
+<turbo-frame id="pagination">
+{% if posts.paginator.num_pages > 1 %}
+    <div>
+        {% if posts.has_previous %}
+            <a href="?page={{ posts.previous_page_number }}" data-turbo-action="replace" data-turbo-frame="pagination">Previous</a>
+        {% else %}
+            <span>Previous</span>
+        {% endif %}
+
+        {% if posts.paginator.num_pages <= 6 %}
+            {% for num in posts.paginator.page_range %}
+                {% if posts.number == num %}
+                    <span><strong>{{ num }}</strong></span>
+                {% else %}
+                    <a href="?page={{ num }}" data-turbo-action="replace" data-turbo-frame="pagination">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if posts.number > 3 %}
+                <a href="?page=1" data-turbo-action="replace" data-turbo-frame="pagination">1</a>
+                <span>...</span>
+            {% endif %}
+            {% for num in posts.paginator.page_range %}
+                {% if num >= posts.number|add:"-3" and num <= posts.number|add:"3" %}
+                    {% if posts.number == num %}
+                        <span><strong>{{ num }}</strong></span>
+                    {% else %}
+                        <a href="?page={{ num }}" data-turbo-action="replace" data-turbo-frame="pagination">{{ num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if posts.number < posts.paginator.num_pages|add:"-2" %}
+                <span>...</span>
+                <a href="?page={{ posts.paginator.num_pages }}" data-turbo-action="replace" data-turbo-frame="pagination">{{ posts.paginator.num_pages }}</a>
+            {% endif %}
+        {% endif %}
+        
+        {% if posts.has_next %}
+            <a href="?page={{ posts.next_page_number }}" data-turbo-action="replace" data-turbo-frame="pagination">Next</a>
+        {% else %}
+            <span>Next</span>
+        {% endif %}
+    </div>
+{% endif %}
+</turbo-frame>
+
+
+{% endblock content %}
+

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      
+        <title>Blogs</title>
+
+        <style>
+            form {
+                display: inline-block;
+            }
+            .post-content {
+                word-wrap: break-word;
+            }
+            a {
+                text-decoration: none; 
+                color: rgb(79, 182, 246); 
+            }
+            a:hover {
+                color: red; 
+                }
+            
+            body {
+                margin: 0;
+            }
+
+            nav {
+                display: flex; 
+                justify-content: space-around;
+            }
+
+            nav div {
+                background-color: white; 
+                padding: 10px; 
+                margin: 5px;
+            }
+            
+
+                            
+        </style>
+    </head>
+    <body>
+        <nav>
+            <div>
+                <a href="{% url 'post_list' %}">Home-page</a>
+            </div>
+            {% if user.is_authenticated %}
+            <div>
+                <a href="{% url 'new_post' %}">Post new articles</a>
+            </div>
+            <div>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+            {% else %}
+            <div>
+                <a href="{% url 'login' %}">Login</a>
+            </div>
+            <div>
+                <a href="{% url 'register' %}">Register</a>
+            </div>
+            {% endif %}
+            <div>
+                <form action="{% url 'search' %}" method="get">
+                    <input type="text" name="q">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+            {% block filter_form %}
+            <div>
+                <form action="{% url 'post_list' %}" method="get">
+                    From: <input type="date" name="start_date" value="{{ request.GET.start_date }}">
+                    To: <input type="date" name="end_date" value="{{ request.GET.end_date }}">
+                    <button type="submit">Filter by date</button>
+                </form>
+            </div>
+            {% endblock filter_form %}
+            <div>
+                <a href="{% url 'author_list' %}">Authors</a>
+            </div>
+            {% if user.is_authenticated %}
+            <div>
+                <a href="{% url 'user_center' %}">User Center</a>
+            </div>
+            {% endif %}
+        </nav>
+        {% block content %}
+        {% endblock content %}
+    </body>
+    
+</html>
+
+

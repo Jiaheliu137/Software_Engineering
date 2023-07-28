@@ -1,0 +1,20 @@
+{% extends 'blogs/base.html' %}
+
+{% block content %}
+
+<h1 style="text-align:center;">New blogs</h1>
+
+<form method="post" style="display: flex; flex-direction: column; align-items: center; width: 50%; margin: 10px auto;">
+    {% csrf_token %}
+    <div style="margin: 10px; width: 100%;">
+        {{ form.title.label_tag }}<br>
+        <input type="text" name="{{ form.title.name }}" style="width: 95%; margin: 10px auto;">
+    </div>
+    <div style="margin: 10px; width: 100%;">
+        {{ form.content.label_tag }}<br>
+        <textarea name="{{ form.content.name }}" style="width: 95%; height: 400px; margin: 10px auto; overflow-y: auto;"></textarea>
+    </div>
+    <button type="submit">Post</button>
+</form>
+
+{% endblock content %}

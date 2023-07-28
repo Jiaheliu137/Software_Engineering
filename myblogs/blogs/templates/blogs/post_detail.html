@@ -1,0 +1,19 @@
+{% extends 'blogs/base.html' %}
+
+{% block content %}
+<div style="width: 60%; margin: 10px auto;">
+    <h1 style="text-align: center;">{{ post.title }}</h1>
+    <p style="text-align: center;">Author: {{ post.author.user.username }}</p>
+    <p style="text-align: center;">Post-Date: {{ post.date_created }}</p>
+    <div style="width: 100%; height: 400px; margin: 10px auto; border: 1px solid; overflow-y: auto; padding: 5px; word-wrap: break-word;">
+        <pre>{{ post.content | safe}}</pre>
+    </div>
+    {% if user == post.author.user or user.is_superuser %}
+        <div style="text-align: center;">
+            <turbo-frame id="delete_frame">
+                <a href="{% url 'post_delete' post.id %}" data-turbo-action="replace" data-turbo-frame="delete_frame" style="padding: 5px 10px; background-color: red; color: white; border-radius: 5px;">Delete</a>
+            </turbo-frame>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

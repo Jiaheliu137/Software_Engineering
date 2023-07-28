@@ -1,0 +1,87 @@
+{% extends 'blogs/base.html' %}
+
+{% block filter_form %}
+<div>
+<form action="{% url 'search' %}" method="get">
+    <input type="hidden" name="q" value="{{ query }}">
+    From: <input type="date" name="start_date"
+        value="{{ request.GET.start_date }}">
+    To: <input type="date" name="end_date"
+        value="{{ request.GET.end_date }}">
+    <button type="submit">Filter by date</button>
+</form>
+</div>
+{% endblock filter_form %}
+
+{% block content %}
+
+<h1>Search results</h1>
+
+<ul>
+{% for post in results %}
+    <li>
+        <h2>Title: <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
+        <p>Author: <a href="{% url 'author_posts' post.author.user.username %}">{{ post.author.user.username }}</a></p>
+        <p>Post-Date：{{ post.date_created }}</p>
+        <p>Content: {{ post.content|slice:":50" }}{% if post.content|length > 50 %}...{% endif %}</p>
+
+    </li>
+
+{% empty %}
+    <li>No results.</li>
+{% endfor %}
+</ul>
+
+
+{% if results.paginator.num_pages > 1 %}
+    <div>
+        {% if results.has_previous %}
+            <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.previous_page_number }}">Previous</a>
+        {% else %}
+            <span>Previous</span>
+        {% endif %}
+
+        {% if results.paginator.num_pages <= 6 %}
+            {% for num in results.paginator.page_range %}
+                {% if results.number == num %}
+                    <span><strong>{{ num }}</strong></span>
+                {% else %}
+                    <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ num }}">{{ num }}</a>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            {% if results.number > 3 %}
+                <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page=1">1</a>
+                <span>...</span>
+            {% endif %}
+            {% for num in results.paginator.page_range %}
+                {% if num >= results.number|add:"-3" and num <= results.number|add:"3" %}
+                    {% if results.number == num %}
+                        <span><strong>{{ num }}</strong></span>
+                    {% else %}
+                        <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if results.number < results.paginator.num_pages|add:"-2" %}
+                <span>...</span>
+                <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.paginator.num_pages }}">{{ results.paginator.num_pages }}</a>
+            {% endif %}
+        {% endif %}
+        
+        {% if results.has_next %}
+            <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.next_page_number }}">Next</a>
+        {% else %}
+            <span>Next</span>
+        {% endif %}
+        
+        <form method="GET">
+            <input type="hidden" name="q" value="{{ query }}">
+            <input type="hidden" name="start_date" value="{{ request.GET.start_date }}">
+            <input type="hidden" name="end_date" value="{{ request.GET.end_date }}">
+            <input type="number" id="go_to_page" name="page" min="1" max="{{ results.paginator.num_pages }}" required>
+            <button type="submit">Go</button>
+        </form>
+    </div>
+{% endif %}
+{% endblock content %}

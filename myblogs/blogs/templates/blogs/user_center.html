@@ -1,0 +1,33 @@
+{% extends 'blogs/base.html' %}
+
+{% block content %}
+
+<h1 style="text-align:center;">User Center</h1>
+
+<div style="display: flex; flex-direction: column; align-items: center; width: 50%; margin: 10px auto;">
+
+    <div style="width: 100%; text-align: center;">
+        <h2>Username: {{ user.username }}</h2>
+        <p><a href="{% url 'author_posts' user.username %}">My Posts</a></p>
+    </div>
+
+    <div style="width: 100%; margin: 10px;">
+        <h3 style="text-align: center;">Change Username</h3>
+        <form method="POST" style="display: flex; flex-direction: column; align-items: center;">
+            {% csrf_token %}
+            {{ username_form.as_p }}
+            <button type="submit">Change Username</button>
+        </form>
+    </div>
+
+    <div style="width: 100%; margin: 10px;">
+        <h3 style="text-align: center;">Change Password</h3>
+        <form method="POST" style="display: flex; flex-direction: column; align-items: center;">
+            {% csrf_token %}
+            {{ password_form.as_p }}
+            <button type="submit">Change Password</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
