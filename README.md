@@ -121,7 +121,6 @@ The project uses the following templates:
 - **Filtering Articles**: Users can filter articles by date.
 
   - Direct Filtering: This will filter all articles on the site.
-  - Searching within filtered results: Users can search within the filtered results. 
 
 ## 6.Possible future optimizations for the project:
 - Enhance the UI interface.

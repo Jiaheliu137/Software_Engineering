@@ -3,7 +3,6 @@ name = "myblogs"
 version = "0.1.0"
 description = ""
 authors = ["LIU JIAHE <jiahe.liu@qq.com>"]
-readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.9"
