@@ -1,12 +1,14 @@
+English|**[简体中文](./myblogs/README_CN.md)**
+
 This repo is used to record Sourse:Software Engineering for Internet Applications
 
 **The project builds a blog website using Django.**
 
-
-
 # Tech Spec Document
 
 ## 0. Use
+
+Open the terminal and execute the following commands one by one.
 
 ```bash
 git clone https://github.com/Jiaheliu137/Software_Engineering
@@ -17,7 +19,7 @@ poetry install
 
 ```python
 poetry shell
-python admin
+python manage.py runserver
 ```
 
 **The administrator's**
@@ -91,23 +93,22 @@ The project uses the following templates:
 - **Posting, Editing, and Deleting Articles**: Logged-in users can publish new articles and delete their own articles.
 
   - Regular users can only delete their own articles.
-
     - A prompt will ask if they want to delete, and if confirmed, the article will be deleted, and the user will be redirected to the main website homepage. If canceled, the user will stay on the current article page.
-
+    
   - Administrators have the privilege to directly delete all articles.
 
   - The "bleach" library is used to filter sensitive HTML tags, allowing users to utilize certain safe tags and attributes to enhance editing flexibility.
     The allowed tags and attributes are: [list the allowed tags and attributes here]
-
+    
     ```python
     ALLOWED_TAGS
     frozenset({'acronym', 'pre', 'em', 'span', 'i', 'abbr', 'table', 'li', 'blockquote', 'h4', 'h2', 'div', 'th', 'img', 'thead', 'br', 'ol', 'tbody', 'strong', 'td', 'b', 'h3', 'h1', 'code', 'tr', 'a', 'h5', 'p', 'ul', 'h6'})
      ALLOWED_ATTRIBUTES
     {'a': ['href', 'rel', 'target'], 'abbr': ['title'], 'acronym': ['title'], 'img': ['src', 'alt']}
     ```
-
+    
     Other tags will not be rendered, they will only display as string forms.
-
+    
     
 
 - **Viewing Author's Articles**: Users can view all articles by a specific author.
@@ -123,14 +124,9 @@ The project uses the following templates:
   - Searching within filtered results: Users can search within the filtered results. 
 
 ## 6.Possible future optimizations for the project:
-
 - Enhance the UI interface.
 - Add a commenting feature.
 - Implement article editing functionality.
 - Enable the ability to insert images into articles.
 - Introduce tagging functionality, allowing users to categorize articles by assigning tags.
-
-
-
-
 

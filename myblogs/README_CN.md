@@ -1,8 +1,34 @@
 
 
+[English](.././README.md)|简体中文
+
 **这个项目用django建立了一个博客网站**
 
 # MyBlogs Tech Spec Document
+
+## 0.Use
+
+打开终端，依次执行下面的命令
+
+```bash
+git clone https://github.com/Jiaheliu137/Software_Engineering
+cd Software_Engineering/myblogs
+pip install poetry
+poetry install
+```
+
+```python
+poetry shell
+python manage.py runserver
+```
+
+**管理员账户：**
+
+**用户名: admin**
+
+**密码: admin123456**
+
+下次继续运行该项目的时候要首先进入项目文件夹，再运行`poetry shell`
 
 ## 1. Introduction
 
