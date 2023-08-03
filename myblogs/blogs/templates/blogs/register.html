@@ -1,7 +1,129 @@
 <h1>Register</h1>
 
-<form method="post">
+<!-- <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Register</button>
+</form> -->
+
+<!-- <form method="post">
+    {% csrf_token %}
+    <div>
+        <label for="{{ form.username.id_for_label }}">Username:</label>
+        {{ form.username }}
+        {% if form.username.errors %}
+            <div class="errors">
+                {% for error in form.username.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        <label for="{{ form.password1.id_for_label }}">Password:</label>
+        {{ form.password1 }}
+        {% if form.password1.errors %}
+            <div class="errors">
+                {% for error in form.password1.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <div>
+        <label for="{{ form.password2.id_for_label }}">Password confirmation:</label>
+        {{ form.password2 }}
+        {% if form.password2.errors %}
+            <div class="errors">
+                {% for error in form.password2.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+    <button type="submit">Register</button>
+</form> -->
+
+<script>
+function togglePasswordVisibility() {
+    var toggleState ; // Default state
+    var toggleButtonText ;
+
+    // Loop through arguments (the IDs)
+    for (var i = 0; i < arguments.length; i++) {
+        var passwordInput = document.getElementById(arguments[i]);
+        if (passwordInput.type === 'password') {
+
+            passwordInput.type = 'text';
+            toggleState = 'text';
+            toggleButtonText = 'Hide';
+        } else {
+            passwordInput.type = 'password';
+            toggleState = 'password';
+            toggleButtonText = 'Show';
+        }
+    }
+
+    // Update the button text based on the final toggle state
+    var toggleButton = document.querySelector("button[onclick*='togglePasswordVisibility']");
+    toggleButton.innerText = toggleButtonText;
+}
+
+
+</script>
+    
+    
+    
+
+<form method="post">
+{% csrf_token %}
+
+<!-- Username Field -->
+<div>
+    <label for="id_username">Username:</label>
+    <!-- Let user see what the username is before when they failed to register  -->
+    <input type="text" name="username" id="id_username" value="{{ form.username.value|default_if_none:'' }}"> 
+    {% if form.username.errors %}
+        <div class="errors">
+        <table>
+            {% for error in form.username.errors %}
+            <p><li>{{ error }}</li></p>
+            {% endfor %}
+        </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Password Field -->
+<div>
+    <label for="id_password1">Password:</label>
+    <input type="password" name="password1" id="id_password1" value="">
+    <button type="button" onclick="togglePasswordVisibility('id_password1', 'id_password2')">Show</button>
+    {% if form.password1.errors %}
+        <div class="errors">
+        <table>
+            {% for error in form.password1.errors %}
+            <p><li>{{ error }}</li></p>
+            {% endfor %}
+        </table>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Password Confirmation Field -->
+<div>
+    <label for="id_password2">Password confirmation:</label>
+    <input type="password" name="password2" id="id_password2" value="">
+    {% if form.password2.errors %}
+        <div class="errors">
+        <table>
+            {% for error in form.password2.errors %}
+            <p><li>{{ error }}</li></p>
+            {% endfor %}
+        </table>
+        </div>
+    {% endif %}
+</div>
+
+<button type="submit">Register</button>
 </form>

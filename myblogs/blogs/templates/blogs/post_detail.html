@@ -3,7 +3,8 @@
 {% block content %}
 <div style="width: 60%; margin: 10px auto;">
     <h1 style="text-align: center;">{{ post.title }}</h1>
-    <p style="text-align: center;">Author: {{ post.author.user.username }}</p>
+    <p style="text-align: center;">Author: <a href="{% url 'author_posts' username=post.author.user.username %}">{{ post.author.user.username }}</a></p>
+    
     <p style="text-align: center;">Post-Date: {{ post.date_created }}</p>
     <div style="width: 100%; height: 400px; margin: 10px auto; border: 1px solid; overflow-y: auto; padding: 5px; word-wrap: break-word;">
         <pre>{{ post.content | safe}}</pre>

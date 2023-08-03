@@ -8,22 +8,21 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 import bleach
-import cssutils
 from django.conf import settings
 
 
 
 
 
-
+# from django.contrib.auth.models import User
 class Author(models.Model):
-    # user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, related_name='author')
 
     def __str__(self):
         return self.user.username
     
+# from django.db.models.signals import post_save
 @receiver(post_save, sender=User)
 def create_user_author(sender, instance, created, **kwargs):
     if created:
@@ -33,6 +32,9 @@ def create_user_author(sender, instance, created, **kwargs):
 def save_user_author(sender, instance, **kwargs):
     instance.author.save()
 
+
+
+# from django.db import models
 class Post(models.Model):
     title = models.CharField(max_length=200)
     content = models.TextField()

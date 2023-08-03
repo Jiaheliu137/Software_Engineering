@@ -1,12 +1,79 @@
 
 <h1 style="text-align:center;">Login</h1>
 
-<div style="display: flex; flex-direction: column; align-items: center; width: 50%; margin: 10px auto;">
+<!-- <div style="display: flex; flex-direction: column; align-items: center; width: 50%; margin: 10px auto;">
     <form method="post" style="display: flex; flex-direction: column; align-items: center;">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Login</button>
     </form>
+</div> -->
+
+
+
+<div style="display: flex; flex-direction: column; align-items: center; width: 50%; margin: 10px auto;">
+    <form method="post" style="display: flex; flex-direction: column; align-items: flex-start;">
+        {% csrf_token %}
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="width: 30%;">
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+            </div>
+            <div style="width: 70%;">
+                <input type="text" id="{{ form.username.id_for_label }}" name="{{ form.username.name }}" value="{{ form.username.value|default_if_none:'' }}">
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+            <div style="width: 30%;">
+                <label for="{{ form.password.id_for_label }}">Password:</label>
+            </div>
+            <div style="width: 70%; display: flex; align-items: center;">
+                <input type="password" id="{{ form.password.id_for_label }}" name="{{ form.password.name }}" value="{{ form.password.value|default:'' }}" style="margin-right: 10px;">
+                <button style = "width: 60px" type="button" onclick="togglePasswordVisibility('{{ form.password.id_for_label }}')">Show</button>
+            </div>
+        </div>
+        
+        <div style="width: 100%; display: flex; justify-content: center;">
+            <button type="submit">Login</button>
+        </div>
+        {% if form.non_field_errors %}
+            <!-- <div class="errors" style="width: 100%;">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div> -->
+            <div><ul><li>password or username is wrong</li></ul></div>
+        {% endif %}
+        {% if form.username.errors %}
+        <div class="errors" style="width: 100%;">
+            <!-- {% for error in form.username.errors %}
+                <p>{{ error }}</p>
+            {% endfor %} -->
+            <div><ul><li>Please enter username</li></ul></div>
+        </div>
+    {% endif %}
+    {% if form.password.errors %}
+            <!-- <div class="errors" style="width: 100%;">
+                {% for error in form.password.errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div> -->
+            <div><ul><li>Please enter password</li></ul></div>
+        {% endif %}
+    </form>
 </div>
 
 
+<script>
+    function togglePasswordVisibility(passwordInputId) {
+        var passwordInput = document.getElementById(passwordInputId);
+        var toggleButton = document.querySelector("button[onclick*='togglePasswordVisibility']");
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleButton.innerText = 'Hide';
+        } else {
+            passwordInput.type = 'password';
+            toggleButton.innerText = 'Show';
+        }
+    }
+</script>

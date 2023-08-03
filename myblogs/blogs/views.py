@@ -36,10 +36,8 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 from django.http import HttpResponse
 
-
-
-
-
+# from django.core.paginator import Paginator
+# from .models import Post, Author
 def post_list(request):
     posts = Post.objects.all().order_by('-date_created')
 
@@ -61,7 +59,7 @@ def post_list(request):
 
     paginator = Paginator(posts, 5)  # Show 5 posts per page.
 
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page',1)
     posts = paginator.get_page(page_number)
 
     return render(request, 'blogs/post_list.html', {'posts': posts})
@@ -94,6 +92,7 @@ def author_posts(request, username):
     page_number = request.GET.get('page', 1)
     posts = paginator.get_page(page_number)
 
+    # use name='author_posts' to find a related url pattern in urls.py and transfer the param: username
     current_url = reverse('author_posts', kwargs={'username': username})
 
     return render(request, 'blogs/author_posts.html', {'posts': posts, 'author': author,'current_url': current_url})
@@ -109,17 +108,21 @@ def post_detail(request, pk):
     return render(request, 'blogs/post_detail.html', {'post': post})
 
 
+# from django.contrib.auth.forms import UserCreationForm
+# from django.contrib.auth import login as auth_login
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save() # for the form created by UserCreationForm,form.save() will return an User object
             auth_login(request, user)  # Log the user in.
             return redirect('post_list')
     else:
         form = UserCreationForm()
+    print(form.fields)
     return render(request, 'blogs/register.html', {'form': form})
 
+#from django.contrib.auth.forms import AuthenticationForm
 def login(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, request.POST)
@@ -129,13 +132,17 @@ def login(request):
             return redirect('post_list')
     else:
         form = AuthenticationForm()
+    print(form.fields)
     return render(request, 'blogs/login.html', {'form': form})
 
+# from .forms import PostForm
 @login_required
 def new_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
+            # Save the data in the form to the post object, but don't save it to the database for now. 
+            # commit=False is to add the author information later.
             post = form.save(commit=False)
             post.author = request.user.author
             post.save()

@@ -34,54 +34,43 @@
 
 
 {% if results.paginator.num_pages > 1 %}
-    <div>
+    <div style="margin-left: 50px;">
+        <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page=1">First Page</a>
+        &nbsp;&nbsp; 
         {% if results.has_previous %}
             <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.previous_page_number }}">Previous</a>
         {% else %}
             <span>Previous</span>
         {% endif %}
+        &nbsp;&nbsp; 
 
-        {% if results.paginator.num_pages <= 6 %}
-            {% for num in results.paginator.page_range %}
+        {% for num in results.paginator.page_range %}
+            {% if num >= results.number|add:"-4" and num <= results.number|add:"3" %}
                 {% if results.number == num %}
                     <span><strong>{{ num }}</strong></span>
                 {% else %}
                     <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ num }}">{{ num }}</a>
                 {% endif %}
-            {% endfor %}
-        {% else %}
-            {% if results.number > 3 %}
-                <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page=1">1</a>
-                <span>...</span>
             {% endif %}
-            {% for num in results.paginator.page_range %}
-                {% if num >= results.number|add:"-3" and num <= results.number|add:"3" %}
-                    {% if results.number == num %}
-                        <span><strong>{{ num }}</strong></span>
-                    {% else %}
-                        <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ num }}">{{ num }}</a>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-            {% if results.number < results.paginator.num_pages|add:"-2" %}
-                <span>...</span>
-                <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.paginator.num_pages }}">{{ results.paginator.num_pages }}</a>
-            {% endif %}
-        {% endif %}
-        
+        {% endfor %}
+
+        &nbsp;&nbsp; 
         {% if results.has_next %}
             <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.next_page_number }}">Next</a>
         {% else %}
             <span>Next</span>
         {% endif %}
-        
-        <form method="GET">
+        &nbsp;&nbsp; 
+        <form method="GET" style="display: inline;">
             <input type="hidden" name="q" value="{{ query }}">
             <input type="hidden" name="start_date" value="{{ request.GET.start_date }}">
             <input type="hidden" name="end_date" value="{{ request.GET.end_date }}">
-            <input type="number" id="go_to_page" name="page" min="1" max="{{ results.paginator.num_pages }}" required>
+            <input type="number" id="go_to_page" name="page" min="1" max="{{ results.paginator.num_pages }}" required style="width: 50px;">
             <button type="submit">Go</button>
         </form>
+        &nbsp; 
+        <a href="?q={{ query }}&start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ results.paginator.num_pages }}">Last Page</a>
     </div>
 {% endif %}
+
 {% endblock content %}

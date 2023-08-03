@@ -12,8 +12,8 @@
 <ul>
 {% for post in posts %}
     <li>
-        <h2>Title: <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a></h2>
-        <p>Author: <a href="{% url 'author_posts' post.author.user.username %}">{{ post.author.user.username }}</a></p>
+        <h2>Title: <a href="{% url 'post_detail' pk=post.pk %}">{{ post.title }}</a></h2>
+        <p>Author: <a href="{% url 'author_posts' username=post.author.user.username %}">{{ post.author.user.username }}</a></p>
         <p>Post-Date：{{ post.date_created }}</p>
         <p>Content: {{ post.content|slice:":50"| safe }}{% if post.content|length > 50 %}...{% endif %}</p>
    
@@ -24,57 +24,43 @@
 </ul>
 
 {% if posts.paginator.num_pages > 1 %}
-    <div>
+    <div style="margin-left: 50px;">
+        <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page=1">First Page</a>
+        &nbsp;&nbsp; 
         {% if posts.has_previous %}
             <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ posts.previous_page_number }}">Previous</a>
         {% else %}
             <span>Previous</span>
         {% endif %}
+        &nbsp;&nbsp; 
 
-        {% if posts.paginator.num_pages <= 6 %}
-            {% for num in posts.paginator.page_range %}
+        {% for num in posts.paginator.page_range %}
+            {% if num >= posts.number|add:"-4" and num <= posts.number|add:"3" %}
                 {% if posts.number == num %}
                     <span><strong>{{ num }}</strong></span>
                 {% else %}
                     <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ num }}">{{ num }}</a>
                 {% endif %}
-            {% endfor %}
-        {% else %}
-            {% if posts.number > 3 %}
-                <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page=1">1</a>
-                <span>...</span>
             {% endif %}
-            {% for num in posts.paginator.page_range %}
-                {% if num >= posts.number|add:"-3" and num <= posts.number|add:"3" %}
-                    {% if posts.number == num %}
-                        <span><strong>{{ num }}</strong></span>
-                    {% else %}
-                        <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ num }}">{{ num }}</a>
-                    {% endif %}
-                {% endif %}
-            {% endfor %}
-            {% if posts.number < posts.paginator.num_pages|add:"-2" %}
-                <span>...</span>
-                <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ posts.paginator.num_pages }}">{{ posts.paginator.num_pages }}</a>
-            {% endif %}
-        {% endif %}
-        
+        {% endfor %}
+
+        &nbsp;&nbsp; 
         {% if posts.has_next %}
             <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ posts.next_page_number }}">Next</a>
         {% else %}
             <span>Next</span>
         {% endif %}
-        <form method="GET">
+        &nbsp;&nbsp; 
+        <form method="GET" style="display: inline;">
             <input type="hidden" name="start_date" value="{{ request.GET.start_date }}">
             <input type="hidden" name="end_date" value="{{ request.GET.end_date }}">
-            
-            <input type="number" id="go_to_page" name="page" min="1" max="{{ posts.paginator.num_pages }}" required>
+            <input type="number" id="go_to_page" name="page" min="1" max="{{ posts.paginator.num_pages }}" required style="width: 50px;">
             <button type="submit">Go</button>
         </form>
+        &nbsp; 
+        <a href="?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}&page={{ posts.paginator.num_pages }}">Last Page</a>
     </div>
 {% endif %}
-
-
 
 {% endblock content %}
 
